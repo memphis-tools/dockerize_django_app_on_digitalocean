@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+{% load litreview_extras %}
+
+{% block title %}S'ABONNER POUR VOIR CRITIQUE{% endblock title %}
+
+{% block content %}
+<div class="d-flex justify-content-center py-m-2">
+    <div class="w-75 py-4 d-flex align-items-center ">
+      <div class="instance_container w-100">
+        <div class="d-flex flex-row fw-bold">
+            <div class="col-6 d-flex justify-content-start">
+                <p class="instance_user">{% format_author review.user %} publié une critique</p>
+            </div>
+            <div class="col-6 d-flex justify-content-end">
+                <p class="instance_date">{{ review.time_created|format_time_created }}</p>
+            </div>
+        </div>
+        <div class="review_body_container border-bottom">
+          {% if not followed_user %}
+          <form class="form d-flex justify-content-center justify-content-md-start" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="follow_user" id="{{ review.user.id }}">
+            <button class="btn btn-primary text-decoration-none px-3" type="submit">S'abonner à {{ review.user|title }}</button>
+          </form>
+          {% endif %}
+          <div class="star_rating_container">{{ review.headline }} -
+          {% for rate in review.rating|times %}
+            {% bs_icon 'star-fill' color='yellow' %}
+          {% endfor  %}
+          {% for rate in review.rating|subtract|times %}
+            {% bs_icon 'star' %}
+          {% endfor  %}
+          </div>
+          <p>{{ review.body }}</p>
+        </div>
+        <div class="request_container">
+          <div class="ticket_body_container">
+            <div class="d-flex flex-row fw-bold">
+                <div class="col-6 d-flex justify-content-start">
+                    <p class="instance_user">{% format_author review.ticket.user %} demandé une critique</p>
+                </div>
+                <div class="col-6 d-flex justify-content-end">
+                    <p class="instance_date">{{ review.ticket.time_created|format_time_created }}</p>
+                </div>
+            </div>
+            <p>{{ review.ticket.title }}</p>
+            <p>{{ review.ticket.description }}</p>
+            {% if review.ticket.image %}
+              <img src="{{ review.ticket.image.url }}" alt="">
+            {% endif %}
+            </div>
+          </div>
+          <div class="buttons_container pt-4 d-flex justify-content-center justify-content-md-center mr-2">
+            <a class="btn btn-primary text-decoration-none px-5" href="{% url 'feed' %}">Retour au flux</a>
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% load litreview_extras %}

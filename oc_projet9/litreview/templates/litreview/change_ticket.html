@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% load static %}
+
+{% block title %}MODIFIER VOTRE TICKET{% endblock title %}
+
+{% block content %}
+  <div class="d-flex flex-column align-items-center">
+    <div class="py-4 w-75">
+        <h2>Modifier votre ticket</h2>
+        {% include "litreview/partials/ticket_edit_form_snippet.html" %}
+    </div>
+</div>
+{% endblock content %}

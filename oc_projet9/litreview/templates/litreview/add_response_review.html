@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load litreview_extras %}
+
+{% block title %}CREER UNE CRITIQUE EN REPONSE{% endblock title %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="d-flex flex-column  w-75 py-4">
+        <h2>Créer une critique en réponse</h2>
+        <div class="review_container">
+          <form class="form" action="#" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>Vous êtes en train de poster en réponse à</p>
+            <div class="original_ticket_container">
+              <div class="instance_container">
+              {% include "litreview/partials/ticket_snippet.html" %}
+              </div>
+            </div>
+            <div class="response_review_container">
+              <p fw-bold>Critique</p>
+              {% include "litreview/partials/review_form_snippet.html" %}
+            </div>
+          </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

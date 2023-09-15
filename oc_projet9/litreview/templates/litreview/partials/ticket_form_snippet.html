@@ -1,0 +1,16 @@
+{% load bootstrap5 %}
+{% load litreview_extras %}
+
+<div class="d-flex ">
+    <div class="pb-3 d-flex flex-column ">
+        <label for="title" class="form-label fw-light">Titre</label>
+        <input class="form-control" type="text" name="title" value="">
+        <label for="description" class="form-label fw-light">Description</label>
+        <textarea class="form-control" name="description" rows="8" cols="80"></textarea>
+        <label for="image" class="form-label fw-light">Image</label>
+        <input type="file" name="image" id="btn_img" onchange="update_chosen_file()" class="btn_img" hidden>
+        <label for="btn_img" class="mw-25 btn btn-primary" >Télécharger fichier</label>
+        <span class="d-flex bt-2" id="chosen_file"></span>
+        <input type="hidden" id="edit_form" name="edit_form" value="True" />
+    </div>
+</div>

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CREER UNE CRITIQUE{% endblock title %}
+
+{% block content %}
+<div class="pt-4 d-flex justify-content-center">
+    <div class="w-75 w-md-50 d-flex justify-content-center">
+        <div class="d-flex flex-column justify-content-center">
+            <h2>Créer une critique</h2>
+            <form class="form" action="#" method="post" enctype="multipart/form-data">
+              <p>Livre</p>
+              {% csrf_token %}
+              {% include "litreview/partials/ticket_form_snippet.html" %}
+              <p>Critique</p>
+              {% include "litreview/partials/review_form_snippet.html" %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

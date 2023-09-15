@@ -1,0 +1,28 @@
+{% load static %}
+<div class="d-flex flex-column">
+  <p>Vous êtes en train de poster en réponse à</p>
+  <div class="original_ticket_container">
+    <div class="instance_container">
+    {% include "litreview/partials/ticket_snippet.html" with ticket=review.ticket %}
+    </div>
+  </div>
+  <p>Critique</p>
+  <div class="review_creation_form_items_container">
+    <label for="title" class="form-label fw-light">Titre</label>
+    <input class="form-control text-start" type="text" name="headline" value="{{ review.headline }}">
+    <label for="rating" class="form-label fw-light">Note</label>
+    <div class="d-flex flex-row justify-content-between">
+      <p><input type="radio" id="rating_0" name="rating" value="0" {% if review.rating == 0 %}checked="checked"{% endif %}> - 0</p>
+      <p><input type="radio" id="rating_1" name="rating" value="1" {% if review.rating == 1 %}checked="checked"{% endif %}> - 1</p>
+      <p><input type="radio" id="rating_2" name="rating" value="2" {% if review.rating == 2 %}checked="checked"{% endif %}> - 2</p>
+      <p><input type="radio" id="rating_3" name="rating" value="3" {% if review.rating == 3 %}checked="checked"{% endif %}> - 3</p>
+      <p><input type="radio" id="rating_4" name="rating" value="4" {% if review.rating == 4 %}checked="checked"{% endif %}> - 4</p>
+      <p><input type="radio" id="rating_5" name="rating" value="5" {% if review.rating == 5 %}checked="checked"{% endif %}> - 5</p>
+    </div>
+    <label for="body" class="form-label fw-light">Commentaire</label>
+    <textarea class="form-control text-start" name="body" rows="8" cols="80">{{ review.body }}</textarea>
+  </div>
+  <div class="pt-3 d-flex justify-content-center">
+    <button class="btn btn-primary text-decoration-none px-3" type="submit" name="button">Envoyer</button>
+  </div>
+</div>

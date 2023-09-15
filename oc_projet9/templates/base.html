@@ -1,0 +1,77 @@
+{% load static %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="projet9 openclassroom">
+    <meta name="keywords" content="html5 css3 js python django">
+    <!-- custom css -->
+    <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">
+    <!-- favicon  -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}">
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/6ade739cd0.js" crossorigin="anonymous"></script>
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;400&display=swap" rel="stylesheet">
+    <title>{% block title %}{% endblock title %}</title>
+  </head>
+  <body>
+      <header>
+        <div class="pt-5 mt-5 d-flex flex-column justify-content-center align-items-between">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white justify-content-center">
+                <div class="mt-5 mb-2 pt-2 pb-2 pt-4 p-md-2 container-fluid border-bottom ">
+                  {% if user.is_authenticated %}
+                        <a class="navbar-brand position-absolute top-0 start-50 translate-middle pb-0" href="{% url 'feed' %}">
+                            <img id="brand_logo" class="img-fluid" width="75%" src="{% static 'assets/img/logo_litreview_projet9.png' %}" alt="logo image">
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon bg-light"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-end pt-3 pb-0" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="btn nav-link btn-outline-primary border-0" aria-current="page" href="{% url 'feed' %}">Flux</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn nav-link btn-outline-primary border-0" aria-current="page" href="{% url 'posts' %}">Posts</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn nav-link btn-outline-primary border-0" aria-current="page" href="{% url 'subscriptions' %}">Abonnements</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn nav-link btn-outline-primary border-0" aria-current="page" href="{% url 'logout' %}">Se déconnecter</a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a class="navbar-brand position-absolute top-0 start-50 translate-middle pt-4 pb-5" href="{% url 'feed' %}">
+                            <img id="brand_logo" class="img-fluid" width="75%" src="{% static 'assets/img/logo_litreview_projet9.png' %}" alt="logo image">
+                        </a>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+      </header>
+      <main>
+        <section>
+          {% block content %}{% endblock content %}
+        </section>
+      </main>
+      <footer class="border-top py-4">
+        <div class="container d-flex flex-column align-items-center justify-content-center">
+          <div id="footer_info" class=""></div>
+          <img class="img-fluid" width="75px" src="{% static 'assets/img/logo_litreview_projet9.png' %}" alt="logo image">
+        </div>
+      </footer>
+
+    <script src="{% static 'assets/js/feed.js' %}"></script>
+  </body>
+</html>

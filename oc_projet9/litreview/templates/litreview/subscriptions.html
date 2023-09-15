@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+{% load static %}
+{% load litreview_extras %}
+
+{% block title %}SUBSCRIPTIONS{% endblock title %}
+
+{% block content %}
+<div class="pt-4 pb-3 container d-flex flex-column align-items-center">
+    <div class="w-sm-75 w-md-50">
+        <div class="">
+            <div class="d-flex flex-column align-items-start">
+                <h2 class="fw-bold">Suivre d'autres utilisateurs</h2>
+            </div>
+            <div class="d-flex flex-row justify-content-start">
+                <form class="d-flex form w-100" method="post">
+                  {% csrf_token %}
+                  {% bootstrap_form follow_form %}
+                  <div class="d-flex flex-column w-100">
+                      <input type="text" class="form-control" name="username" placeholder="Nom d'utilisateur" required>
+                      {% bootstrap_button button_type="submit" content="Envoyer" %}
+                  </div>
+                </form>
+            </div>
+        </div>
+        <div class="d-flex flex-column align-items-start">
+            <h2 class="fw-bold">Abonnements</h2>
+            {% if subscriptions|length > 0 %}
+                <table class="table table-borderless d-flex flex-column align-items-start">
+                    {% for subscription in subscriptions %}
+                    <tr class="py-0 d-flex flex-row align-items-baseline">
+                        <td class="px-1 border-none">{{ subscription.followed_user|title }}</td>
+                        <td class="">
+                            <form class="" method="post">
+                              {% csrf_token %}
+                              <input class="w-25" type="hidden" name="username" value="{{ subscription.followed_user }}">
+                              {{ unsubscribe_form }}
+                              {% bootstrap_button button_type="submit" content="Désabonner" %}
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>Pas d'abonnements pour le moment</p>
+            {% endif %}
+        </div>
+        <div class="d-flex flex-column align-items-start">
+            <h2 class="fw-bold">Abonnés</h2>
+            {% if followers|length > 0 %}
+                {% for follower in followers %}
+                <div class="d-flex w-100 flex-column align-items-center">
+                    <table>
+                        <tr>
+                            <td>{{ follower.user|title }}</td>
+                        </tr>
+                    </table>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>Pas d'abonnés pour le moment</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}SUPPRIMER VOTRE TICKET{% endblock title %}
+
+{% block content %}
+<div class="">
+    <div class="d-flex flex-column align-items-center">
+        <h2>Supprimer votre ticket "{{ ticket.title }}"</h2>
+        <form class="form" action="#" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="buttons_container">
+              <button class="btn btn-primary text-decoration-none px-3" type="submit" name="button">Supprimer</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

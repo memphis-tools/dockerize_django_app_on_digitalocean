@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+{% load static %}
+{% load litreview_extras %}
+
+{% block title %}POSTS{% endblock title %}
+
+{% block content %}
+<div class="container">
+      <div class="pt-2 d-flex flex-column">
+          <h2>Vos contributions</h2>
+          {% for post in page_obj %}
+              <div class="py-2 container d-flex flex-column">
+                {% if post|get_instance_type == "Ticket" %}
+                    {% include "litreview/partials/ticket_snippet.html" with ticket=post %}
+                    <div class="pb-3 d-flex border-bottom justify-content-end">
+                      <div class="d-flex justify-content-between">
+                          <div class="">
+                              {% if post.has_been_reviewed %}
+                                  <a class="btn btn-primary text-decoration-none px-2" href="{% url 'subscribe_to_see_review' post.id %}">Voir la critique</a>
+                              {% endif %}
+                              <a class="btn btn-primary text-decoration-none" href="{% url 'change_ticket' post.id %}">Modifier</a>
+                              <a class="btn btn-primary text-decoration-none" href="{% url 'delete_ticket' post.id %}">Supprimer</a>
+                          </div>
+                      </div>
+                    </div>
+                {% elif post|get_instance_type == "Review" %}
+                    {% include "litreview/partials/review_snippet.html" with review=post %}
+                    <div class="pb-3 d-flex border-bottom justify-content-end">
+                        <div class="d-flex justify-content-between">
+                            <div class="">
+                                <a class="btn btn-primary text-decoration-none" href="{% url 'change_review' post.id %}">Modifier</a>
+                                <a class="btn btn-primary text-decoration-none" href="{% url 'delete_review' post.id %}">Supprimer</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+              </div>
+          {% endfor %}
+          {% if page_obj|length > 0 %}
+          <div class="paginator_container d-flex flex-row flex-md-column">
+              {% include 'litreview/partials/page_navigator.html' %}
+          </div>
+          {% else %}
+          <div class="d-flex flex-row justify-content-center">
+              <p>Vous n'avez pas encore de contributions.</p>
+          </div>
+          {% endif %}
+    </div>
+</div>
+{% endblock content %}

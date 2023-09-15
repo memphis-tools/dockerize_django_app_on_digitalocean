@@ -1,0 +1,58 @@
+  variables:
+    IMAGE_NAME: memphistools/public_repo
+
+  stages:
+    - test
+    - build
+    - deploy
+
+  run_tests:
+    stage: test
+    image: python:3.10-slim-buster
+    before_script:
+      - apt-get update -y
+      - python -m venv env
+      - source env/bin/activate
+      - pip install -r oc_projet9/requirements.txt
+    script:
+      - python -m pytest oc_projet9/ -vs oc_projet9/
+
+  build_image:
+    stage: build
+    image: docker:24.0.5
+    services:
+      - docker:24.0.5-dind
+    variables:
+      DOCKER_TLS_CERTDIR: "/certs"
+    before_script:
+      - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD
+    script:
+      - docker-compose -f docker-compose.yml up -d --build
+      - docker tag "dockerize_django_app_on_digitalocean-nginx:latest" $IMAGE_NAME:dockerize_django_app_on_digitalocean_nginx
+      - docker push $IMAGE_NAME:dockerize_django_app_on_digitalocean_nginx
+      - docker tag "postgres:15.0-alpine" $IMAGE_NAME:dockerize_django_app_on_digitalocean_db
+      - docker push $IMAGE_NAME:dockerize_django_app_on_digitalocean_db
+      - docker tag "dockerize_django_app_on_digitalocean-web:latest" $IMAGE_NAME:dockerize_django_app_on_digitalocean_web
+      - docker push $IMAGE_NAME:dockerize_django_app_on_digitalocean_web
+
+  deploy:
+    stage: deploy
+    before_script:
+      - chmod 0400 $SSH_KEY
+    script:
+      - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@$ETH0_SWARM_MANAGER_IP "
+          docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD &&
+          docker pull memphistools/public_repo:dockerize_django_app_on_digitalocean_db &&
+          docker pull memphistools/public_repo:dockerize_django_app_on_digitalocean_web &&
+          docker pull memphistools/public_repo:dockerize_django_app_on_digitalocean_nginx &&
+          docker swarm leave --force || True &&
+          docker volume inspect media-files -f {{.Name}} || docker volume create media-files || True &&
+          docker volume inspect static-files -f {{.Name}} || docker volume create static-files || True &&
+          docker volume inspect postgresql-data -f {{.Name}} || docker volume create postgresql-data || True &&
+          docker system prune -fa &&
+          docker swarm init --advertise-addr $ETH1_SWARM_MANAGER_IP &&
+          docker secret create db_secret ./oc_projet9_db_secret.txt &&
+          docker secret create web_secret ./oc_projet9_web_secret.txt &&
+          docker service create --name db --hostname 'db' --secret db_secret -e POSTGRES_PASSWORD_FILE=/run/secrets/db_secret --env-file app_vars_env --mount type=volume,source=postgresql-data,target=/var/lib/postgresql/data memphistools/public_repo:dockerize_django_app_on_digitalocean_db &&
+          docker service create --name nginx --hostname 'nginx' --host web:172.17.0.4 --publish published=5555,target=80 --network bridge --mount type=volume,source=static-files,target=/home/app/web/staticfiles --mount type=volume,source=media-files,target=/home/app/web/mediafiles memphistools/public_repo:dockerize_django_app_on_digitalocean_nginx &&
+          docker service create --name web --hostname 'web' --secret src=web_secret,target=/run/secrets/web_secret --secret src=db_secret,target=/run/secrets/db_secret -e SQL_PASSWORD=/run/secrets/db_secret -e SECRET_KEY=/run/secrets/web_secret -e DJANGO_ALLOWED_HOSTS=$ETH0_SWARM_MANAGER_IP --env-file app_vars_env --entrypoint '/bin/sh ./entrypoint.sh' --mount type=volume,source=static-files,target=/home/app/web/staticfiles --mount type=volume,source=media-files,target=/home/app/web/mediafiles memphistools/public_repo:dockerize_django_app_on_digitalocean_web "

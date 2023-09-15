@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% load bootstrap_icons %}
+{% load static %}
+{% load litreview_extras %}
+
+{% block title %}FLUX{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="mb-3 d-flex flex-column align-items-sm-center flex-md-row justify-content-md-center">
+        <div class="py-sm-2 d-flex justify-content-start px-5">
+            <a class="w-100 btn btn-primary text-decoration-none px-5" href="{% url 'add_ticket' %}">Demander une critique</a>
+        </div>
+        <div class="py-2 align-items-center d-flex justify-content-start justify-content-md-end px-5">
+            <a class="w-100 btn btn-primary text-decoration-none px-5" href="{% url 'add_review' %}">Créer une critique</a>
+        </div>
+    </div>
+    <div class="container">
+      <h2>Votre flux</h2>
+      {% for instance in page_obj %}
+          {% if instance|get_instance_type == "Ticket" %}
+              <div class="instance_container border-bottom pb-3">
+                  {% include 'litreview/partials/ticket_snippet.html' with ticket=instance %}
+                  {% if not instance.has_been_reviewed %}
+                    <div class="d-flex justify-content-end">
+                      <a class="btn btn-primary text-decoration-none px-2" href="{% url 'add_response_review' instance.id %}">Créer une critique</a>
+                    </div>
+                  {% else %}
+                    <div class="d-flex justify-content-end">
+                      <a class="btn btn-primary text-decoration-none px-2" href="{% url 'subscribe_to_see_review' instance.id %}">Voir la critique</a>
+                    </div>
+                  {% endif %}
+              </div>
+          {% elif instance|get_instance_type == "Review" %}
+              <div class="border-bottom">
+                {% include 'litreview/partials/review_snippet.html' with review=instance %}
+              </div>
+          {% endif %}
+      {% endfor %}
+
+    </div>
+    {% if page_obj|length > 0%}
+    <div class="paginator_container d-flex flex-row flex-md-column">
+      {% include 'litreview/partials/page_navigator.html' %}
+    </div>
+    {% else %}
+    <div class="d-flex flex-row justify-content-center">
+        <p>Vous n'avez pas encore de flux.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

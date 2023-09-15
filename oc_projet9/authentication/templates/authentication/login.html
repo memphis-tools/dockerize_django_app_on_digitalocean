@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}LOGIN{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row d-flex flex-s-column flex-md-row justify-content-md-center ">
+        <div class="d-sm-flex col-s-1 col-md-6 justify-content-center p-s-5 p-md-5">
+            <div class="d-flex flex-column w-100 p-3">
+                <h2>Inscrivez-vous maintenant</h2>
+                <a class="btn btn-primary text-decoration-none" href="{% url 'signin' %}">S'inscrire</a>
+            </div>
+        </div>
+        <div class="d-sm-flex col-s-1 col-md-6 justify-content-center p-s-5 p-md-2">
+          <div class="d-flex flex-column w-100 p-3">
+            <h2 class="d-sm-flex align-items-sm-center">Connectez-vous</h2>
+            <form class="form mx-s-auto" method="post">
+              {% csrf_token %}
+              {% bootstrap_form form %}
+              {% bootstrap_button button_type="submit" content="Se connecter" %}
+            </form>
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

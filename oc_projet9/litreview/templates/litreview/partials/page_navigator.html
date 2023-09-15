@@ -1,0 +1,28 @@
+{% load bootstrap5 %}
+
+<div class="d-flex flex-column justify-content-between py-4">
+  <div class="d-flex flex-row justify-content-center">
+    <div class="p-1 d-flex flex-column flex-md-row px-md-3">
+        <span>
+          {% if page_obj.has_previous %}
+            <a class="btn btn-primary" href="?page=1">Premiers</a>
+            <a class="btn btn-primary mx-md-2" href="?page={{ page_obj.previous_page_number }}">Précédents</a>
+          {% else %}
+            <a class="btn btn-primary" href="#">Premiers</a>
+            <a class="btn btn-primary mx-md-2" href="#">Précédents</a>
+          {% endif %}
+        </span>
+    </div>
+    <div class="p-1 d-flex flex-column flex-md-row px-md-3">
+        <span>
+          {% if page_obj.has_next %}
+            <a class="btn btn-primary" href="?page={{ page_obj.next_page_number }}">Prochains</a>
+            <a class="btn btn-primary mx-md-2" href="?page={{ page_obj.paginator.num_pages }}">Derniers</a>
+          {% else %}
+            <a class="btn btn-primary" href="#">Prochains</a>
+            <a class="btn btn-primary mx-md-2" href="#">Derniers</a>
+          {% endif %}
+        </span>
+    </div>
+  </div>
+</div>

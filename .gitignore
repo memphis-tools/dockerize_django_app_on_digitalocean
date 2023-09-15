@@ -1,0 +1,16 @@
+.env
+.env.prod
+.envrc
+.venv
+env
+venv
+__pycache__
+*.pyc
+.pytest_cache
+.coverage
+.cache
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+terraform/terraform.tfplan

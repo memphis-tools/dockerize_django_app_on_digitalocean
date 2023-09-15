@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CREER UN TICKET{% endblock title %}
+
+{% block content %}
+<div class="pt-4 d-flex justify-content-center">
+    <div class="w-75 w-md-50 d-flex justify-content-center">
+        <div class="d-flex flex-column ">
+            <h2>Créer une demande de critique</h2>
+            <form class="form" action="#" method="post" enctype="multipart/form-data">
+              <p>Livre</p>
+              {% csrf_token %}
+              {% include "litreview/partials/ticket_form_snippet.html" with ticket=ticket_creation_form%}
+              <div class="d-flex justify-content-center">
+                  <button class="btn btn-primary text-decoration-none px-3" type="submit" name="button">Envoyer</button>
+              </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% load static %}
+
+{% block title %}MODIFIER VOTRE CRITIQUE{% endblock title %}
+
+{% block content %}
+<div class="d-flex flex-column align-items-center">
+    <div class="py-4 w-75 ">
+        <h2>Modifier votre critique</h2>
+        <form class="form" action="#" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% include "litreview/partials/review_edit_form_snippet.html" %}
+        </form>
+    </div>
+</div>
+{% endblock content %}
