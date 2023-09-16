@@ -8,8 +8,8 @@ services:
     stop_grace_period: 10s
     command: gunicorn oc_projet9_appli_web_django.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - static_volume:/home/app/web/staticfiles
-      - media_volume:/home/app/web/mediafiles
+      - static_volume:/home/dummy-operator/web/staticfiles
+      - media_volume:/home/dummy-operator/web/mediafiles
     expose:
       - 8000
     env_file:
@@ -26,10 +26,10 @@ services:
   nginx:
     build: ./nginx
     volumes:
-      - static_volume:/home/app/web/staticfiles
-      - media_volume:/home/app/web/mediafiles
+      - static_volume:/home/dummy-operator/web/staticfiles
+      - media_volume:/home/dummy-operator/web/mediafiles
     ports:
-      - 5555:80
+      - 5555:8080
     depends_on:
       - web
 

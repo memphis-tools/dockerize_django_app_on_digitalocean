@@ -5,14 +5,14 @@
 # pull official base image
 FROM python:3.10.1-alpine
 
-# create directory for the app user and create the app user
-RUN mkdir -p /home/app; \
-    addgroup -S app; \
-    adduser -S app -G app
+# create directory for the dummy-operator user and create the dummy-operator user
+RUN mkdir -p /home/dummy-operator; \
+    addgroup -S dummy-operator; \
+    adduser -S dummy-operator -G dummy-operator
 
 # create the appropriate directories
-ENV HOME=/home/app
-ENV APP_HOME=/home/app/web
+ENV HOME=/home/dummy-operator
+ENV APP_HOME=/home/dummy-operator/web
 RUN mkdir $APP_HOME; \
     mkdir /var/log/gunicorn; \
     mkdir $APP_HOME/staticfiles; \
@@ -35,5 +35,7 @@ COPY . $APP_HOME
 # copy media files
 COPY ./media/* $APP_HOME/mediafiles
 
-# chown all the files to the app user
-RUN chown -R app:app $APP_HOME
+# chown all the files to the dummy-operator user
+RUN chown -R dummy-operator:dummy-operator $APP_HOME
+
+USER dummy-operator
