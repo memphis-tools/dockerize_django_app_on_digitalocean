@@ -48,7 +48,7 @@ Postgresql 15 (driver psycopg 3)
 
 Gunicorn
 
-Nginx
+Nginx (nginxinc/nginx-unprivileged image)
 
 Docker, DockerHub
 
@@ -58,23 +58,13 @@ Terraform
 
 ## About it
 
-Published to expose and share progresses. this a dummy working Django project to use for learning purposes.
-
-The application is an exercise based on a local development required by a French Python's Developer curriculum.
-
-It remains at work.
-
 Goal is to have a 'flexible and functional' Django's skeleton application that follows best practices. Ready to be run through containers.
 
 ## Documentation, sources
 
-As a beginner, we have to consult many documentations, examples, suggestions and assertions.
-
-Be sure there are no dummy copy /paste things.
-
 Notice we use the default 'postgres:*.0-alpine' image. We do not update the 'pg_hba.conf' file.
 
-We try to reduce /adapt the Dockerfile's files layer.
+Nginx publish port 5555, but the local container use 8080 (default for nginxinc/nginx-unprivileged image).
 
 Implementation of Docker secrets: [DOCKER SECRETS](https://docs.docker.com/engine/swarm/secrets/)
 
@@ -115,11 +105,15 @@ Postgresql is the database back-end. It dialogues with Django.
 
 ## How use it ?
 
-The common requirement shloud to have create a [DockerHub account](https://hub.docker.com/)
+The common requirement should to have create a [DockerHub account](https://hub.docker.com/)
+
+---
 
 ### Local deployment
 
 You must have installed docker-compose.
+
+Actually see the local deployment capability as a development environment. Here we set .env (not in the cloud deployment).
 
 1. Clone the repository
 
@@ -137,9 +131,9 @@ You must have installed docker-compose.
 
       `pip install -r requirements.txt`
 
-3. Create a '.env.prod' file in the app folder
+3. Create a '.env' file in the app folder
 
-  .env.prod content:
+File content:
 
       DEBUG=0
       SECRET_KEY='SuperSecretKeyToSetByYourself'
@@ -162,7 +156,9 @@ Either you (re)initialize application: ./docker-compose-local-deployment.sh rese
 
 Either you stop and restart application: ./docker-compose-local-deployment.sh reload
 
-### Remote deployment
+---
+
+### Cloud deployment
 
 You need a Gitlab and DigitalOcean account to perform the following.
 
@@ -212,71 +208,43 @@ You have a DigitalOcean account, then create a personal access token, and a ssh 
 
   `[dockerize_django_app_on_digitalocean]$ touch oc_projet9_web_secret.txt`: copy /paste in it your Django SECRET_KEY
 
-  `[dockerize_django_app_on_digitalocean]$ touch app_vars_env`: set it as illustrated below
-
-      DEBUG=0
-      SQL_ENGINE=django.db.backends.postgresql
-      SQL_DATABASE=oc_projet9
-      SQL_USER=postgres
-      SQL_HOST=172.17.0.2
-      SQL_PORT=5432
-      DATABASE=postgres
-      POSTGRES_USER=postgres
-      POSTGRES_DB=oc_projet9
-      SUPERUSER_NAME=admin
-      SUPERUSER_EMAIL=admin@somebluelake.fr
-
 So you should be able to obtain the below arborescence and informations displayed (we set the 'droplet' name as 'dummy-ops') :
 
     `dummy-ops:~# pwd
     /root
     dummy-ops:~# ls -l
     total 12
-    -rw-r--r-- 1 root root 189 Sep 14 21:30 app_vars_env
     -rw-r--r-- 1 root root  11 Sep 14 20:01 oc_projet9_db_secret.txt
     -rw-r--r-- 1 root root  65 Sep 14 20:01 oc_projet9_web_secret.txt
 
     # notice: eth0's "159.65.122.181" is the public ipv4 address (manually declared on Gitlab as ETH0_SWARM_MANAGER_IP).
-    The 5555 port is served through the published port of the Nginx service (set in the 'docker-compose.yml' file). Waiting for TLS the current port translation is *:5555->*:80
+    The 5555 port is served through the published port of the Nginx service (set in the 'docker-compose.yml' file). Waiting for TLS the current port translation is *:5555->*:8080
     # notice: eth1's "10.135.0.2" is a private ipv4 address (manually declared on Gitlab as ETH1_SWARM_MANAGER_IP).
 
     dummy-ops:~# ip -br -4 a
     lo               UNKNOWN        127.0.0.1/8
-    eth0             UP             159.65.122.181/20 10.19.0.5/16  << 159.65.122.181 is the public ipv4 address. So here we would have a http://159.65.122.181:5555 as index page (port has been harcoded you can change it, and so update image).
-    eth1             UP             10.135.0.2/16                   << The one used while publishing the Swarm (dummy-ops:~# docker swarm init --advertise-addr 10.135.0.2)
+    eth0             UP             159.65.122.181/20  << 159.65.122.181 is the public ipv4 address. So here we would have a http://159.65.122.181:5555 as index page (port has been harcoded you can change it, and so update image).
+    eth1             UP             10.135.0.2/16      << The one used while publishing the Swarm (dummy-ops:~# docker swarm init --advertise-addr 10.135.0.2)
     docker0          DOWN           172.17.0.1/16
 
     dummy-ops:~# cat oc_projet9_db_secret.txt
-    @pplepie94
-
-    dummy-ops:~# cat app_vars_env
-    DEBUG=0
-    SQL_ENGINE=django.db.backends.postgresql
-    SQL_DATABASE=oc_projet9
-    SQL_USER=postgres
-    SQL_HOST=172.17.0.2
-    SQL_PORT=5432
-    DATABASE=postgres
-    POSTGRES_USER=postgres
-    POSTGRES_DB=oc_projet9
-    SUPERUSER_NAME=admin
-    SUPERUSER_EMAIL=admin@somebluelake.fr`
+    @pplepie94`
 
 **Notice the bad pratice here**: i hardcode set 2 secrets plain texts, waiting to be set and used as secrets during the Gitlab CI/CD execution, whereas they could /should be removed after docker secret's creation.
 
 Run a pipeline.
 
-![Screenshot](illustrations/oc_projet9_gitlab_pipeline.png))
+![Screenshot](illustrations/oc_projet9_gitlab_pipeline.png)
 
 After the deployment, you add some dummy initial datas as users, text and pictures. Use your web.1 id:
 
     `dummy-ops:~# docker exec web.1.uqj7sxdugvyex93tr4tvkd8mr python ./manage.py init_app_litreview`
 
-![Screenshot](illustrations/oc_projet9_init_app.png))
+![Screenshot](illustrations/oc_projet9_init_app.png)
 
 Open a browser, and log with one of the dummy user created with the init_app_litreview management command.
 
-![Screenshot](illustrations/oc_projet9_on_digitalocean_1.png))
+![Screenshot](illustrations/oc_projet9_on_digitalocean_1.png)
 
 By the way, finally, you can destroy the 'droplet' the way you created it by running:
 
@@ -284,7 +252,7 @@ By the way, finally, you can destroy the 'droplet' the way you created it by run
 
  `[dockerize_django_app_on_digitalocean]$ terraform -chdir=terraform apply terraform.tfplan`
 
- ![Screenshot](illustrations/oc_projet9_destroy_droplet.png))
+ ![Screenshot](illustrations/oc_projet9_destroy_droplet.png)
 
 #### Setup the Gitlab project
 
@@ -292,21 +260,39 @@ You have to create the project on Gitlab directly or import it from Github.
 
 Then declare the following **ENV variables in your Gitlab project**. These will be fully used at **test and build stages** (Gitlab CI/CD) only:
 
-    DEBUG, DJANGO_ALLOWED_HOSTS, POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_USER, SQL_ENGINE, SQL_DATABASE, SQL_USER, SQL_PASSWORD, SQL_HOST, SQL_PORT, DATABASE, REGISTRY_USER, REGISTRY_PASSWORD, SSH_KEY, ETH0_SWARM_MANAGER_IP, ETH1_SWARM_MANAGER_IP, SUPERUSER_NAME, SUPERUSER_EMAIL
+    DJANGO_ALLOWED_HOSTS, POSTGRES_DB, POSTGRES_PASSWORD,REGISTRY_USER, REGISTRY_PASSWORD, SSH_KEY, ETH0_SWARM_MANAGER_IP, ETH1_SWARM_MANAGER_IP
 
-![Screenshot](illustrations/gitlab_env_variables.png))
+![Screenshot](illustrations/gitlab_env_variables.png)
 
-Actually, the same content as the 'app_vars_env' file. But:
+    REGISTRY_USER and REGISTRY_PASSWORD: Your DockerHub credentials
 
-      REGISTRY_USER and REGISTRY_PASSWORD: Your DockerHub credentials
+    SSH_KEY: the content of your private SSH key.
 
-      SSH_KEY: the content of your private SSH key.
+    ETH0_SWARM_MANAGER_IP: the public ip address which comes from the 'droplet' (virtual machine) created. The eth0 ipv4 address. Don't hardcode eth0 instead of ip (for Linux). In the example: 159.65.122.181.
 
-      ETH0_SWARM_MANAGER_IP: the public ip address which comes from the 'droplet' (virtual machine) created. The eth0 ipv4 address. Don't hardcode eth0 instead of ip (for Linux). In the example: 159.65.122.181.
-
-      ETH1_SWARM_MANAGER_IP: the private ip address from the droplet. In the example: 10.135.0.2.
+    ETH1_SWARM_MANAGER_IP: the private ip address from the droplet. In the example: 10.135.0.2.
 
 ![Screenshot](illustrations/dummy_ops_addresses.png)
+
+---
+
+### Github actions: workflow
+
+![Screenshot](illustrations/gitlab_pull_checks.png)
+
+The ggshield python's package is not in the requirements.txt.
+
+![Screenshot](illustrations/gitguardian_scan.png)
+
+If you want to scan the 3 images used in this public project:
+
+    memphistools/public_repo:dockerize_django_app_on_digitalocean_db
+
+    memphistools/public_repo:dockerize_django_app_on_digitalocean_nginx
+
+    memphistools/public_repo:dockerize_django_app_on_digitalocean_web
+
+---
 
 ### About project usages
 
