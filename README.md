@@ -1,6 +1,10 @@
-![Screenshot](illustrations/python-django.svg) ![Screenshot](illustrations/python-postgresql.svg)
+![Screenshot](https://img.shields.io/badge/python-v3.10-blue?logo=python&logoColor=yellow)
+![Screenshot](https://img.shields.io/badge/django-v4.2.3-blue?logo=django&logoColor=yellow)
+![Screenshot](https://img.shields.io/badge/postgresql-v15-blue?logo=postgresql&logoColor=yellow)
+![Screenshot](https://img.shields.io/badge/docker--blue?logo=docker&logoColor=yellow)
+![Screenshot](https://img.shields.io/badge/terraform--blue?logo=hashicorp&logoColor=yellow)
+![Screenshot](https://img.shields.io/badge/digitalocean--black?logo=digitalocean&logoColor=yellow&color=blue)
 
-![Screenshot](illustrations/docker-django.svg)
 
 # Dockerize a dummy Django app
 
@@ -14,9 +18,9 @@ Dummy Django application which simulates a micro social network where people pub
 
 The application can be deployed on local containers through Compose.
 
-It can be deploy on a cloud provider too, here DigitalOcean for the example, as a 1 node swarm cluster running 3 services.
+It can be deploy on a cloud provider too, here DigitalOcean for the example, as a 1 node swarm cluster running 3 services (we use docker secrets).
 
-The project is mirrored on Gitlab where a CI/CD "test, build, deploy" chain is run.
+The project is bind to Gitlab where a CI/CD "test, build, deploy" chain run.
 
 Django particularity set: 'DJANGO_ALLOWED_HOSTS' is a coma separated string to declare host. Only 1 is used, the first one (see settings.py).
 
@@ -56,7 +60,7 @@ Terraform
 
 Published to expose and share progresses. this a dummy working Django project to use for learning purposes.
 
-The application is an exercise based on a local development required in a French Python's Developer curriculum.
+The application is an exercise based on a local development required by a French Python's Developer curriculum.
 
 It remains at work.
 
@@ -143,6 +147,8 @@ You must have installed docker-compose.
       POSTGRES_USER=postgres
       POSTGRES_PASSWORD=SuperPasswordToSetByYourself
       POSTGRES_DB=oc_projet9
+      SUPERUSER_NAME=admin
+      SUPERUSER_EMAIL=admin@somebluelake.fr
 
 Then execute: "./docker-compose-local-deployment.sh"
 
