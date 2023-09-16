@@ -14,7 +14,7 @@ Last update: **2023/09/16**
 
 Dummy Django application which simulates a micro social network where people publish or ask for literary criticisms.
 
-**Learning purposes.**. At work.
+**Learning purposes.**.
 
 The application can be deployed on local containers through Compose.
 
@@ -29,7 +29,6 @@ Django particularity set: 'DJANGO_ALLOWED_HOSTS' is a coma separated string to d
   - docker secrets are set on the virtual machine manually before run the CI/CD chain. No vault or mount points.
   - docker secrets access is /are delivered for such path: /run/secrets/*. Problem is than it can be read by any one connected on the container.
   - initial deployment requires a manual terraform execution in order to publish on the cloud provider.
-  - improvements still at work, specially about avoiding useless manual actions.
   - no dynamic IP /DNS detection or recognition: we create 3 containers /services successively, on the default Swarm network.
   - no dissociate deployment environments (1 context for development, 1 for production etc).
   - Gitlab project is create manually, not through API.
@@ -37,9 +36,6 @@ Django particularity set: 'DJANGO_ALLOWED_HOSTS' is a coma separated string to d
   - Compose could be used, but here we have a Swarm and the DNS hosts are not set automatically. We force '/etc/hosts' update with the 'docker service create' directive '--host'.
   - no tests's thresholds controlled.
   - Docker daemon is not rootless.
-  - **a Wiki should be created in order to show how simple project can be run compare to the README length :)**.
-
-Note: applicationn and all set from a Fedora (Linux) distribution. The '/etc/hosts' file allows local DNS resolver capability.
 
 ## Technologies
 Python 3
@@ -62,7 +58,7 @@ Goal is to have a 'flexible and functional' Django's skeleton application that f
 
 ## Documentation, sources
 
-Notice we use the default 'postgres:*.0-alpine' image. We do not update the 'pg_hba.conf' file.
+Notice we use the default 'postgres:15.0-alpine' image. **We do not update the 'pg_hba.conf' file**.
 
 Nginx publish port 5555, but the local container use 8080 (default for nginxinc/nginx-unprivileged image).
 
@@ -202,7 +198,7 @@ You have a DigitalOcean account, then create a personal access token, and a ssh 
 
   `ssh root@PublicIpAddress`
 
-  Touch 3 files (on the remote host after ssh connection succeeded):
+  Touch 2 files (on the remote host after ssh connection succeeded):
 
   `[dockerize_django_app_on_digitalocean]$ touch oc_projet9_db_secret.txt`: copy /paste in it your POSTGRESQL_PASSWORD
 
@@ -223,7 +219,7 @@ So you should be able to obtain the below arborescence and informations displaye
 
     dummy-ops:~# ip -br -4 a
     lo               UNKNOWN        127.0.0.1/8
-    eth0             UP             159.65.122.181/20  << 159.65.122.181 is the public ipv4 address. So here we would have a http://159.65.122.181:5555 as index page (port has been harcoded you can change it, and so update image).
+    eth0             UP             159.65.122.181/20  << the public ipv4 address. So here we would have a http://159.65.122.181:5555 as index page
     eth1             UP             10.135.0.2/16      << The one used while publishing the Swarm (dummy-ops:~# docker swarm init --advertise-addr 10.135.0.2)
     docker0          DOWN           172.17.0.1/16
 
