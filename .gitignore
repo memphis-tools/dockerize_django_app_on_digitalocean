@@ -1,5 +1,4 @@
 .env
-.env.prod
 .envrc
 .venv
 env
