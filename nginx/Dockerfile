@@ -1,4 +1,4 @@
-FROM nginx:1.14.2-alpine
+FROM nginxinc/nginx-unprivileged:alpine
 
-RUN apk update && apk add bash && rm /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d

@@ -10,7 +10,7 @@
 
 ## Description
 
-Last update: **2023/09/15**
+Last update: **2023/09/16**
 
 Dummy Django application which simulates a micro social network where people publish or ask for literary criticisms.
 
@@ -87,8 +87,6 @@ About Django and Docker secrets. Don"t be fooled, Django vars expect a value, no
 
 Other various links:
 
-https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/
-
 https://docs.docker.com/develop/security-best-practices/
 
 https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
@@ -98,6 +96,14 @@ https://docs.docker.com/engine/reference/commandline/service_create/
 https://docs.docker.com/engine/security/rootless/
 
 https://docs.docker.com/engine/swarm/secrets/
+
+https://blog.stephane-robert.info/post/docker-secrets/
+
+https://blog.gitguardian.com/hunting-for-secrets-in-docker-hub/
+
+https://github.com/GitGuardian/ggshield
+
+https://hub.docker.com/r/nginxinc/nginx-unprivileged
 
 ## How it works ?
 
