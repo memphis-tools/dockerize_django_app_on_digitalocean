@@ -3,7 +3,7 @@
 # See: https://www.psycopg.org/psycopg3/docs/basic/install.html
 
 # pull official base image
-FROM python:3.10.1-alpine
+FROM python:3.12.8-alpine3.19
 
 # create directory for the dummy-operator user and create the dummy-operator user
 RUN mkdir -p /home/dummy-operator; \

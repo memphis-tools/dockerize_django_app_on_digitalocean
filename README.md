@@ -1,6 +1,6 @@
-![Screenshot](https://img.shields.io/badge/python-v3.10-blue?logo=python&logoColor=yellow)
-![Screenshot](https://img.shields.io/badge/django-v4.2.3-blue?logo=django&logoColor=yellow)
-![Screenshot](https://img.shields.io/badge/postgresql-v15-blue?logo=postgresql&logoColor=yellow)
+![Screenshot](https://img.shields.io/badge/python-v3.12.8-blue?logo=python&logoColor=yellow)
+![Screenshot](https://img.shields.io/badge/django-v4.2.18-blue?logo=django&logoColor=yellow)
+![Screenshot](https://img.shields.io/badge/postgresql-v16-blue?logo=postgresql&logoColor=yellow)
 ![Screenshot](https://img.shields.io/badge/docker--blue?logo=docker&logoColor=yellow)
 ![Screenshot](https://img.shields.io/badge/terraform--blue?logo=hashicorp&logoColor=yellow)
 ![Screenshot](https://img.shields.io/badge/digitalocean--black?logo=digitalocean&logoColor=yellow&color=blue)
@@ -11,7 +11,7 @@
 
 ## Description
 
-Last update: **2023/09/16**
+Last update: **2025/01/18**
 
 Dummy Django application which simulates a micro social network where people publish or ask for literary criticisms.
 
@@ -41,7 +41,7 @@ Django particularity set: 'DJANGO_ALLOWED_HOSTS' is a coma separated string to d
 ## Technologies
 Python 3
 
-Postgresql 15 (driver psycopg 3)
+Postgresql 16 (driver psycopg 3)
 
 Gunicorn
 
@@ -59,7 +59,7 @@ Goal is to have a 'flexible and functional' Django's skeleton application that f
 
 ## Documentation, sources
 
-Notice we use the default 'postgres:15.0-alpine' image. **We do not update the 'pg_hba.conf' file**.
+Notice we use the default 'postgres:16.0-alpine' image. **We do not update the 'pg_hba.conf' file**.
 
 Nginx publish port 5555, but the local container use 8080 (default for nginxinc/nginx-unprivileged image).
 
@@ -126,7 +126,7 @@ Actually see the local deployment capability as a development environment. Here 
 
       `pip install -U pip`
 
-      `pip install -r requirements.txt`
+      `pip install -r dummy_app/requirements.txt`
 
 3. Create a '.env' file in the app folder
 
@@ -136,22 +136,26 @@ File content:
       SECRET_KEY='SuperSecretKeyToSetByYourself'
       DJANGO_ALLOWED_HOSTS='0.0.0.0'
       SQL_ENGINE=django.db.backends.postgresql
-      SQL_DATABASE=oc_projet9
+      SQL_DATABASE=dummy_app_django
       SQL_USER=postgres
       SQL_PASSWORD=SuperPasswordToSetByYourself
       SQL_HOST=db
       SQL_PORT=5432
       POSTGRES_USER=postgres
       POSTGRES_PASSWORD=SuperPasswordToSetByYourself
-      POSTGRES_DB=oc_projet9
+      POSTGRES_DB=dummy_app_django
       SUPERUSER_NAME=admin
       SUPERUSER_EMAIL=admin@somebluelake.fr
 
 Then execute: "./docker-compose-local-deployment.sh"
 
-Either you (re)initialize application: ./docker-compose-local-deployment.sh reset
+Either you (re)initialize application:
 
-Either you stop and restart application: ./docker-compose-local-deployment.sh reload
+    ./docker-compose-local-deployment.sh reset
+
+Either you stop and restart application:
+
+    ./docker-compose-local-deployment.sh reload
 
 ---
 
@@ -201,9 +205,9 @@ You have a DigitalOcean account, then create a personal access token, and a ssh 
 
   Touch 2 files (on the remote host after ssh connection succeeded):
 
-  `[dockerize_django_app_on_digitalocean]$ touch oc_projet9_db_secret.txt`: copy /paste in it your POSTGRESQL_PASSWORD
+  `[dockerize_django_app_on_digitalocean]$ touch dummy_app_django_db_secret.txt`: copy /paste in it your POSTGRESQL_PASSWORD
 
-  `[dockerize_django_app_on_digitalocean]$ touch oc_projet9_web_secret.txt`: copy /paste in it your Django SECRET_KEY
+  `[dockerize_django_app_on_digitalocean]$ touch dummy_app_django_web_secret.txt`: copy /paste in it your Django SECRET_KEY
 
 So you should be able to obtain the below arborescence and informations displayed (we set the 'droplet' name as 'dummy-ops') :
 
@@ -211,8 +215,8 @@ So you should be able to obtain the below arborescence and informations displaye
     /root
     dummy-ops:~# ls -l
     total 12
-    -rw-r--r-- 1 root root  11 Sep 14 20:01 oc_projet9_db_secret.txt
-    -rw-r--r-- 1 root root  65 Sep 14 20:01 oc_projet9_web_secret.txt
+    -rw-r--r-- 1 root root  11 Sep 14 20:01 dummy_app_django_db_secret.txt
+    -rw-r--r-- 1 root root  65 Sep 14 20:01 dummy_app_django_web_secret.txt
 
     # notice: eth0's "159.65.122.181" is the public ipv4 address (manually declared on Gitlab as ETH0_SWARM_MANAGER_IP).
     The 5555 port is served through the published port of the Nginx service (set in the 'docker-compose.yml' file). Waiting for TLS the current port translation is *:5555->*:8080
@@ -224,24 +228,24 @@ So you should be able to obtain the below arborescence and informations displaye
     eth1             UP             10.135.0.2/16      << The one used while publishing the Swarm (dummy-ops:~# docker swarm init --advertise-addr 10.135.0.2)
     docker0          DOWN           172.17.0.1/16
 
-    dummy-ops:~# cat oc_projet9_db_secret.txt
+    dummy-ops:~# cat dummy_app_django_db_secret.txt
     @pplepie94`
 
 **Notice the bad pratice here**: i hardcode set 2 secrets plain texts, waiting to be set and used as secrets during the Gitlab CI/CD execution, whereas they could /should be removed after docker secret's creation.
 
 Run a pipeline.
 
-![Screenshot](illustrations/oc_projet9_gitlab_pipeline.png)
+![Screenshot](illustrations/dummy_app_gitlab_pipeline.png)
 
 After the deployment, you add some dummy initial datas as users, text and pictures. Use your web.1 id:
 
     `dummy-ops:~# docker exec web.1.uqj7sxdugvyex93tr4tvkd8mr python ./manage.py init_app_litreview`
 
-![Screenshot](illustrations/oc_projet9_init_app.png)
+![Screenshot](illustrations/dummy_app_init_app.png)
 
 Open a browser, and log with one of the dummy user created with the init_app_litreview management command.
 
-![Screenshot](illustrations/oc_projet9_on_digitalocean_1.png)
+![Screenshot](illustrations/dummy_app_on_digitalocean_1.png)
 
 By the way, finally, you can destroy the 'droplet' the way you created it by running:
 
@@ -249,7 +253,7 @@ By the way, finally, you can destroy the 'droplet' the way you created it by run
 
  `[dockerize_django_app_on_digitalocean]$ terraform -chdir=terraform apply terraform.tfplan`
 
- ![Screenshot](illustrations/oc_projet9_destroy_droplet.png)
+ ![Screenshot](illustrations/dummy_app_destroy_droplet.png)
 
 #### Setup the Gitlab project
 

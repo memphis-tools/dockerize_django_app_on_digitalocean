@@ -1,5 +1,5 @@
 """
-ASGI config for oc_projet9_appli_web_django project.
+ASGI config for dummy_app_django project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'oc_projet9_appli_web_django.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dummy_app_django.settings')
 
 application = get_asgi_application()

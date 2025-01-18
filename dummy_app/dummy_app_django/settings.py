@@ -42,7 +42,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'oc_projet9_appli_web_django.urls'
+ROOT_URLCONF = 'dummy_app_django.urls'
 
 TEMPLATES = [
     {
@@ -60,7 +60,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'oc_projet9_appli_web_django.wsgi.application'
+WSGI_APPLICATION = 'dummy_app_django.wsgi.application'
 
 DATABASES = {
     "default": {
@@ -93,7 +93,6 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
-USE_L10N = True
 USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
