@@ -21,9 +21,9 @@
       - apt-get update -y
       - python -m venv env
       - source env/bin/activate
-      - pip install -r oc_projet9/requirements.txt
+      - pip install -r dummy_app/requirements.txt
     script:
-      - python -m pytest oc_projet9/ -vs oc_projet9/
+      - python -m pytest dummy_app/ -vs dummy_app/
 
   build_image:
     stage: build
@@ -59,8 +59,8 @@
           docker volume inspect postgresql-data -f {{.Name}} || docker volume create postgresql-data || True &&
           docker system prune -fa &&
           docker swarm init --advertise-addr $ETH1_SWARM_MANAGER_IP &&
-          docker secret create db_secret ./oc_projet9_db_secret.txt &&
-          docker secret create web_secret ./oc_projet9_web_secret.txt &&
+          docker secret create db_secret ./dummy_app_django_db_secret.txt &&
+          docker secret create web_secret ./dummy_app_django_web_secret.txt &&
           docker service create --name db --hostname 'db' --secret db_secret -e POSTGRES_PASSWORD_FILE=/run/secrets/db_secret -e POSTGRES_DB=$POSTGRES_DB -e POSTGRES_USER=$POSTGRES_USER --mount type=volume,source=postgresql-data,target=/var/lib/postgresql/data memphistools/public_repo:dockerize_django_app_on_digitalocean_db &&
           docker service create --name nginx --hostname 'nginx' --host web:172.17.0.4 --publish published=5555,target=8080 --network bridge --mount type=volume,source=static-files,target=/home/app/web/staticfiles --mount type=volume,source=media-files,target=/home/app/web/mediafiles memphistools/public_repo:dockerize_django_app_on_digitalocean_nginx &&
           docker service create --name web --hostname 'web' --secret src=web_secret,target=/run/secrets/web_secret --secret src=db_secret,target=/run/secrets/db_secret -e SQL_PASSWORD=/run/secrets/db_secret -e SECRET_KEY=/run/secrets/web_secret -e DJANGO_ALLOWED_HOSTS=$ETH0_SWARM_MANAGER_IP -e DEBUG=$DEBUG -e SQL_USER=$SQL_USER -e SQL_DATABASE=$POSTGRES_DB -e SQL_PORT=5432 -e SQL_ENGINE=$SQL_ENGINE -e SQL_HOST=$SQL_HOST -e SUPERUSER_NAME=$SUPERUSER_NAME -e SUPERUSER_EMAIL=$SUPERUSER_EMAIL --entrypoint '/bin/sh ./entrypoint.sh' --mount type=volume,source=static-files,target=/home/app/web/staticfiles --mount type=volume,source=media-files,target=/home/app/web/mediafiles memphistools/public_repo:dockerize_django_app_on_digitalocean_web "
