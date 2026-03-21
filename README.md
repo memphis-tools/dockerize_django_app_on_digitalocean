@@ -1,5 +1,5 @@
-![Screenshot](https://img.shields.io/badge/python-v3.12.8-blue?logo=python&logoColor=yellow)
-![Screenshot](https://img.shields.io/badge/django-v4.2.18-blue?logo=django&logoColor=yellow)
+![Screenshot](https://img.shields.io/badge/python-v3.12.10-blue?logo=python&logoColor=yellow)
+![Screenshot](https://img.shields.io/badge/django-v4.2.24-blue?logo=django&logoColor=yellow)
 ![Screenshot](https://img.shields.io/badge/postgresql-v16-blue?logo=postgresql&logoColor=yellow)
 ![Screenshot](https://img.shields.io/badge/docker--blue?logo=docker&logoColor=yellow)
 ![Screenshot](https://img.shields.io/badge/terraform--blue?logo=hashicorp&logoColor=yellow)
