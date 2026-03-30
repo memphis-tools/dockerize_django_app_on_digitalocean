@@ -30,7 +30,7 @@ psycopg==3.3.3
 psycopg-binary==3.3.3
 pycodestyle==2.11.0
 pyflakes==3.1.0
-Pygments==2.15.1
+Pygments==2.20.0
 pytest==7.4.2
 pytest-django==4.5.2
 python-dotenv==1.0.0
