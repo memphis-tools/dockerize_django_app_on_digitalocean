@@ -9,6 +9,7 @@ class UserFollowForm(forms.Form):
     Paramètre(s):
     - forms: par défaut, on instancie une classe sans modèle de référence
     """
+
     follow_user = forms.BooleanField(widget=forms.HiddenInput, initial=True)
     username = settings.AUTH_USER_MODEL
 
@@ -19,6 +20,7 @@ class UnsubscribeForm(forms.Form):
     Paramètre(s):
     - forms: par défaut, on instancie une classe sans modèle de référence
     """
+
     unsubscribe_user = forms.BooleanField(widget=forms.HiddenInput, initial=True)
     username = settings.AUTH_USER_MODEL
 
@@ -29,7 +31,9 @@ class TicketCreationForm(forms.ModelForm):
     Paramètre(s):
     - forms: par défaut, on instancie sur la base d'un modèle de référence
     """
+
     edit_form = forms.BooleanField(widget=forms.HiddenInput(), initial=True)
+
     class Meta:
         model = models.Ticket
         fields = ["title", "description", "image"]
@@ -41,6 +45,7 @@ class TicketImageDeleteForm(forms.Form):
     Paramètre(s):
     - forms: par défaut, on instancie un Form
     """
+
     delete_form = forms.BooleanField(widget=forms.HiddenInput, initial=True)
 
 
@@ -50,6 +55,7 @@ class ReviewCreationForm(forms.ModelForm):
     Paramètre(s):
     - forms: par défaut, on instancie sur la base d'un modèle de référence
     """
+
     class Meta:
         model = models.Review
         fields = ["headline", "rating", "body"]

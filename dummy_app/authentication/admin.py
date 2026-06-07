@@ -4,11 +4,16 @@ from authentication.models import UserFollows
 
 
 class UserModelAdmin(admin.ModelAdmin):
-    list_display = ["username", ]
+    list_display = [
+        "username",
+    ]
 
 
 class UserFollowsModelAdmin(admin.ModelAdmin):
-    list_display = ["user", "followed_user", ]
+    list_display = [
+        "user",
+        "followed_user",
+    ]
 
 
 admin.site.register(User, UserModelAdmin)

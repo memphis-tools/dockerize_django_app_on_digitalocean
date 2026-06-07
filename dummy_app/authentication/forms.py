@@ -8,6 +8,7 @@ class LitreviewUserCreationForm(UserCreationForm):
     Paramètre(s):
     - UserCreationForm: formulaire générique pour la création d'un utilisateur
     """
+
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
         fields = ["username"]

@@ -1,6 +1,6 @@
-![Screenshot](https://img.shields.io/badge/python-v3.12.10-blue?logo=python&logoColor=yellow)
+![Screenshot](https://img.shields.io/badge/python-v3.12.8-blue?logo=python&logoColor=yellow)
 ![Screenshot](https://img.shields.io/badge/django-v4.2.24-blue?logo=django&logoColor=yellow)
-![Screenshot](https://img.shields.io/badge/postgresql-v16-blue?logo=postgresql&logoColor=yellow)
+![Screenshot](https://img.shields.io/badge/postgresql-v17.5-blue?logo=postgresql&logoColor=yellow)
 ![Screenshot](https://img.shields.io/badge/docker--blue?logo=docker&logoColor=yellow)
 ![Screenshot](https://img.shields.io/badge/terraform--blue?logo=hashicorp&logoColor=yellow)
 ![Screenshot](https://img.shields.io/badge/digitalocean--black?logo=digitalocean&logoColor=yellow&color=blue)
@@ -11,7 +11,7 @@
 
 ## Description
 
-Last update: **2025/01/18**
+Last update: **2026/06/07**
 
 Dummy Django application which simulates a micro social network where people publish or ask for literary criticisms.
 
@@ -39,9 +39,9 @@ Django particularity set: 'DJANGO_ALLOWED_HOSTS' is a coma separated string to d
   - Docker daemon is not rootless.
 
 ## Technologies
-Python 3
+Python 3.12.8
 
-Postgresql 16 (driver psycopg 3)
+Postgresql 17 (driver psycopg 3)
 
 Gunicorn
 
@@ -134,15 +134,15 @@ File content:
 
       DEBUG=0
       SECRET_KEY='SuperSecretKeyToSetByYourself'
-      DJANGO_ALLOWED_HOSTS='0.0.0.0'
+      DJANGO_ALLOWED_HOSTS='localhost'
       SQL_ENGINE=django.db.backends.postgresql
       SQL_DATABASE=dummy_app_django
       SQL_USER=postgres
-      SQL_PASSWORD=SuperPasswordToSetByYourself
+      SQL_PASSWORD=postgres
       SQL_HOST=db
       SQL_PORT=5432
       POSTGRES_USER=postgres
-      POSTGRES_PASSWORD=SuperPasswordToSetByYourself
+      POSTGRES_PASSWORD=postgres
       POSTGRES_DB=dummy_app_django
       SUPERUSER_NAME=admin
       SUPERUSER_EMAIL=admin@somebluelake.fr
