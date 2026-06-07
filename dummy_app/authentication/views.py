@@ -15,10 +15,14 @@ def signin(request):
         form = forms.LitreviewUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            followed_user = User.objects.get(username=form.cleaned_data["username"].lower())
+            followed_user = User.objects.get(
+                username=form.cleaned_data["username"].lower()
+            )
             user_follow = UserFollows(user=followed_user, followed_user=followed_user)
             user_follow.save()
-            messages.success(request, message=f"Bienvenue {user.username}, merci de vous connecter")
+            messages.success(
+                request, message=f"Bienvenue {user.username}, merci de vous connecter"
+            )
             return redirect("feed")
         else:
             messages.error(request, message="Erreur de saisie")

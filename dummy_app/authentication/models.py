@@ -10,7 +10,9 @@ class User(AbstractUser):
         (ADMIN, "administrateur"),
         (USER, "utilisateur"),
     )
-    role = models.CharField(max_length=15, choices=ROLES_SET, default=ROLES_SET[1][0], verbose_name="role")
+    role = models.CharField(
+        max_length=15, choices=ROLES_SET, default=ROLES_SET[1][0], verbose_name="role"
+    )
     abonnements = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         through="UserFollows",
@@ -30,9 +32,19 @@ class User(AbstractUser):
 
 
 class UserFollows(models.Model):
-    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='following', on_delete=models.CASCADE, )
+    user = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL,
+        related_name="following",
+        on_delete=models.CASCADE,
+    )
     followed_user = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, related_name='followed_by', on_delete=models.CASCADE)
+        to=settings.AUTH_USER_MODEL,
+        related_name="followed_by",
+        on_delete=models.CASCADE,
+    )
 
     class Meta:
-        unique_together = ('user', 'followed_user', )
+        unique_together = (
+            "user",
+            "followed_user",
+        )

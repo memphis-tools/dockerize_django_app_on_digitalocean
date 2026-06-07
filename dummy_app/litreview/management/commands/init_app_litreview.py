@@ -17,9 +17,11 @@ def get_secret(key, default):
             return f.read().strip()
     return value
 
+
 SUPERUSER_NAME = os.environ.get("SUPERUSER_NAME")
 SUPERUSER_PASSWORD = get_secret("SUPERUSER_PASSWORD", "")
 SUPERUSER_EMAIL = os.environ.get("SUPERUSER_EMAIL")
+
 
 class Command(BaseCommand):
     help = "Script dédié à initialiser une base de données."
@@ -31,42 +33,45 @@ class Command(BaseCommand):
                 "username": "donald",
                 "first_name": "donald",
                 "last_name": "duck",
-                "email": "donald.duck@somebluelake.fr"
+                "email": "donald.duck@somebluelake.fr",
             },
             {
                 "username": "daisy",
                 "first_name": "daisy",
                 "last_name": "duck",
-                "email": "daisy.duck@somebluelake.fr"
+                "email": "daisy.duck@somebluelake.fr",
             },
             {
                 "username": "loulou",
                 "first_name": "loulou",
                 "last_name": "duck",
-                "email": "loulou.duck@somebluelake.fr"
+                "email": "loulou.duck@somebluelake.fr",
             },
         ]
-        print(f"[DUMMY SUPERUSER CREATION]")
+        print("[DUMMY SUPERUSER CREATION]")
         # keep in mind that user 1 is the default admin
-        User.objects.create_superuser(SUPERUSER_NAME, SUPERUSER_EMAIL, SUPERUSER_PASSWORD)
-        print(f"[DUMMY SUPERUSER CREATED]")
-
-        print(f"[DUMMY USERS CREATION]")
+        User.objects.create_superuser(
+            SUPERUSER_NAME, SUPERUSER_EMAIL, SUPERUSER_PASSWORD
+        )
+        print("[DUMMY SUPERUSER CREATED]")
+        print("[DUMMY USERS CREATION]")
         for user in users_list:
             pre_user = User.objects.create_user(
                 username=user["username"],
                 first_name=user["first_name"],
                 last_name=user["last_name"],
                 email=user["email"],
-                password="applepie94"
+                password="applepie94",
             )
             pre_user.save()
             pre_user.followed_user = User.objects.get(username=user["username"].lower())
-            pre_user.user_follow = UserFollows(user=pre_user.followed_user, followed_user=pre_user.followed_user)
+            pre_user.user_follow = UserFollows(
+                user=pre_user.followed_user, followed_user=pre_user.followed_user
+            )
             pre_user.save()
-        print(f"[DUMMY USERS CREATED]")
+        print("[DUMMY USERS CREATED]")
 
-        print(f"[DUMMY SUBSCRIPTIONS CREATION]")
+        print("[DUMMY SUBSCRIPTIONS CREATION]")
         for followed_id in ["3", "4"]:
             user = User.objects.get(id=2)
             followed_user = User.objects.get(id=followed_id)
@@ -84,9 +89,9 @@ class Command(BaseCommand):
             followed_user = User.objects.get(id=followed_id)
             user_follow = UserFollows(user=user, followed_user=followed_user)
             user_follow.save()
-        print(f"[DUMMY SUBSCRIPTIONS CREATED]")
+        print("[DUMMY SUBSCRIPTIONS CREATED]")
 
-        print(f"[DUMMY TICKETS CREATION]")
+        print("[DUMMY TICKETS CREATION]")
         # we create 2 tickets for user id=2
         # we create 5 tickets for user id=3
         # we create 4 tickets for user id=4
@@ -106,7 +111,7 @@ class Command(BaseCommand):
                 Fusce purus tellus.",
             user=user,
             image="./odyssee_des_fourmis.jpg",
-            has_been_reviewed=False
+            has_been_reviewed=False,
         )
         ticket.save()
 
@@ -120,13 +125,15 @@ class Command(BaseCommand):
                 right at the coast of the Semantics, a large language ocean.",
             user=user,
             image="./arabe_du_futur_6.jpg",
-            has_been_reviewed=False
+            has_been_reviewed=False,
         )
         ticket.save()
 
         # USER 3
         user = User.objects.get(id=3)
-        img = Image.open(r"./images_livres_echantillon/grandes_dates_histoires_du_monde.jpg")
+        img = Image.open(
+            r"./images_livres_echantillon/grandes_dates_histoires_du_monde.jpg"
+        )
         img.thumbnail(settings.IMAGE_PREFERED_SIZE)
         img = img.save(fp="./media/grandes_dates_histoires_du_monde.jpg")
         ticket = Ticket.objects.create(
@@ -138,7 +145,7 @@ class Command(BaseCommand):
                 ",
             user=user,
             image="./grandes_dates_histoires_du_monde.jpg",
-            has_been_reviewed=False
+            has_been_reviewed=False,
         )
         ticket.save()
 
@@ -153,7 +160,7 @@ class Command(BaseCommand):
                 ",
             user=user,
             image="./art_de_moucher_les_facheux.jpg",
-            has_been_reviewed=False
+            has_been_reviewed=False,
         )
         ticket.save()
 
@@ -161,7 +168,9 @@ class Command(BaseCommand):
             r"./images_livres_echantillon/les-hommes-viennent-de-mars-les-femmes-viennent-de-venus.jpg"
         )
         img.thumbnail(settings.IMAGE_PREFERED_SIZE)
-        img = img.save(fp="./media/les-hommes-viennent-de-mars-les-femmes-viennent-de-venus.jpg")
+        img = img.save(
+            fp="./media/les-hommes-viennent-de-mars-les-femmes-viennent-de-venus.jpg"
+        )
         ticket = Ticket.objects.create(
             title="Vu le classique nouvelle édition, Enfin ?!",
             description="Praesent sagittis tellus eleifend mi accumsan ultrices. \
@@ -170,13 +179,11 @@ class Command(BaseCommand):
                 ",
             user=user,
             image="./les-hommes-viennent-de-mars-les-femmes-viennent-de-venus.jpg",
-            has_been_reviewed=False
+            has_been_reviewed=False,
         )
         ticket.save()
 
-        img = Image.open(
-            r"./images_livres_echantillon/puce_a_oreille.jpg"
-        )
+        img = Image.open(r"./images_livres_echantillon/puce_a_oreille.jpg")
         img.thumbnail(settings.IMAGE_PREFERED_SIZE)
         img = img.save(fp="./media/puce_a_oreille.jpg")
         ticket = Ticket.objects.create(
@@ -187,16 +194,13 @@ class Command(BaseCommand):
                 ",
             user=user,
             image="./puce_a_oreille.jpg",
-            has_been_reviewed=False
+            has_been_reviewed=False,
         )
         ticket.save()
 
-        img = Image.open(
-            r"./images_livres_echantillon/lpic_coffret_1_2.jpg"
-        )
+        img = Image.open(r"./images_livres_echantillon/lpic_coffret_1_2.jpg")
         img.thumbnail(settings.IMAGE_PREFERED_SIZE)
         img = img.save(fp="./media/lpic_coffret_1_2.jpg")
-        today_hour = datetime.now().hour
         ticket = Ticket.objects.create(
             title="Beaucoup critiqué mais a fait ses preuves juquà présent ?",
             description="Sed facilis architecto aut enim delectus et maxime nesciunt. \
@@ -222,7 +226,7 @@ class Command(BaseCommand):
                 """,
             user=user,
             image="./geostrategix.jpg",
-            has_been_reviewed=False
+            has_been_reviewed=False,
         )
         ticket.save()
 
@@ -240,7 +244,7 @@ class Command(BaseCommand):
                 """,
             user=user,
             image="./art_de_la_guerre.jpg",
-            has_been_reviewed=False
+            has_been_reviewed=False,
         )
         ticket.save()
 
@@ -255,7 +259,7 @@ class Command(BaseCommand):
                 Aenean massa. Cum es membres del sam fami liesociis natoque penatibus.",
             user=user,
             image="./sapiens_edition_2022.jpg",
-            has_been_reviewed=False
+            has_been_reviewed=False,
         )
         ticket.save()
 
@@ -270,12 +274,11 @@ class Command(BaseCommand):
                 Acilis est et expedita distinctio. Nam libero tempore, cum soluta.",
             user=user,
             image="./le_monde_sans_fin.jpg",
-            has_been_reviewed=False
+            has_been_reviewed=False,
         )
         ticket.save()
-        print(f"[DUMMY TICKETS CREATED]")
-
-        print(f"[DUMMY TICKET+REVIEW CREATION]")
+        print("[DUMMY TICKETS CREATED]")
+        print("[DUMMY TICKET+REVIEW CREATION]")
         # keep in mind that user 1 is the default admin
         # on crée 1 seule instance "demande critique + critique" au nom du user id=2
         # la création d'une critique passe par la création traditionnelle d'un ticket
@@ -294,7 +297,7 @@ class Command(BaseCommand):
             user=user,
             image="./art_de_la_repartie.jpg",
             has_been_reviewed=True,
-            time_created=datetime.today()
+            time_created=datetime.today(),
         )
         ticket.save()
 
@@ -310,9 +313,9 @@ class Command(BaseCommand):
             user=user,
         )
         review.save()
-        print(f"[DUMMY TICKET+REVIEW CREATED]")
+        print("[DUMMY TICKET+REVIEW CREATED]")
 
-        print(f"[DUMMY REVIEWS CREATION]")
+        print("[DUMMY REVIEWS CREATION]")
         # user id=2 makes a review for user id=4
         # the ticket id=8 is the first ticket created by user id=4
         ticket = Ticket.objects.get(id=8)
@@ -352,4 +355,4 @@ class Command(BaseCommand):
         ticket.has_been_reviewed = True
         ticket.save()
 
-        print(f"[DUMMY REVIEWS CREATED]")
+        print("[DUMMY REVIEWS CREATED]")

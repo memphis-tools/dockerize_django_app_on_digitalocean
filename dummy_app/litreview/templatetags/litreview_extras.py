@@ -3,8 +3,18 @@ from django.template import Library
 
 register = Library()
 french_months = [
-    "janvier", "février", "mars", "avril", "mai", "juin", "juillet",
-    "aout", "septembre", "octobre", "novembre", "décembre"
+    "janvier",
+    "février",
+    "mars",
+    "avril",
+    "mai",
+    "juin",
+    "juillet",
+    "aout",
+    "septembre",
+    "octobre",
+    "novembre",
+    "décembre",
 ]
 
 
@@ -28,7 +38,7 @@ def format_author(context, user):
         return f"{str(user).capitalize()} a"
 
 
-@register.filter(name='times')
+@register.filter(name="times")
 def times(number):
     return range(number)
 
